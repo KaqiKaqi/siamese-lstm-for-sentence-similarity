@@ -4,9 +4,17 @@ import tensorflow as tf
 
 class LSTMRNN(object):
     def singleRNN(self, x, scope, cell='lstm', reuse=None):
+        """
+
+        :param x:  [batch_size, max_time, ...] because time-major is False
+        :param scope:
+        :param cell:
+        :param reuse:
+        :return: [batch_size, max_time, cell.output_size]
+        """
         if cell == 'gru':
             with tf.variable_scope('grucell' + scope, reuse=reuse, dtype=tf.float64):
-                used_cell = tf.contrib.rnn.GRUCell(self.hidden_neural_size, reuse=tf.get_variable_scope().reuse)
+                used_cell = tf.contrib.rnn.GRUCell(self.hidden_neural_size, reuse=tf.get_variable_scope().reuse)  # todo: why use tf.get_variable_scope().reuse??
 
         else:
             with tf.variable_scope('lstmcell' + scope, reuse=reuse, dtype=tf.float64):
@@ -53,7 +61,7 @@ class LSTMRNN(object):
         with tf.name_scope('Sentence_Layer'):
             # 此处得到句子向量，通过调整mask，可以改变句子向量的组成方式
             # 由于mask是用于指示句子的结束位置，所以此处使用sum函数而不是mean函数
-            self.sent1 = tf.reduce_sum(self.cell_outputs1 * self.mask_s1[:, :, None], axis=1)
+            self.sent1 = tf.reduce_sum(self.cell_outputs1 * self.mask_s1[:, :, None], axis=1)  # todo: self.mask_s1[:, :, None]
             self.sent2 = tf.reduce_sum(self.cell_outputs2 * self.mask_s2[:, :, None], axis=1)
 
         with tf.name_scope('loss'):

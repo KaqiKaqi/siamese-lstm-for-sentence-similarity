@@ -24,11 +24,11 @@ def load_set(embed, datapath, embed_dim):
             index = []
             for word in words:
                 if word in dtr:
-                    index.append(embed[dtr[word]])
+                    index.append(embed[dtr[word]])  # todo: what is dtr?
                 elif word in embed.vocab:
                     index.append(embed[word])
                 else:
-                    index.append(np.zeros(embed_dim, dtype=float))
+                    index.append(np.zeros(embed_dim, dtype=float))  # unk is represented by zeros
 
             if i == 0:
                 s0.append(np.array(index, dtype=float))
@@ -56,7 +56,7 @@ def load_data(max_len, embed, datapath, embed_dim):
     train_set = [train_set_x1, train_set_x2, train_set_y]
 
     # 创建用于存放训练、测试和验证集的矩阵
-    new_train_set_x1 = np.zeros([len(train_set[0]), max_len, embed_dim], dtype=float)
+    new_train_set_x1 = np.zeros([len(train_set[0]), max_len, embed_dim], dtype=float)  # padding is also zeros
     new_train_set_x2 = np.zeros([len(train_set[0]), max_len, embed_dim], dtype=float)
     new_train_set_y = np.zeros(len(train_set[0]), dtype=float)
     mask_train_x1 = np.zeros([len(train_set[0]), max_len])
@@ -71,7 +71,7 @@ def load_data(max_len, embed, datapath, embed_dim):
                 new_mask_x1[i, len(x1) - 1] = 1
                 new_y[i] = y
             else:
-                new_x1[i, :, :] = (x1[0:max_len:embed_dim])
+                new_x1[i, :, :] = (x1[0:max_len:embed_dim])  # todo: 虽然我明白了这里的两个冒号的意思，但是这里还是不应该这样写的。
                 new_mask_x1[i, max_len - 1] = 1
                 new_y[i] = y
             if len(x2) <= max_len:

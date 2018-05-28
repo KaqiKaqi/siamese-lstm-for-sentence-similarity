@@ -12,14 +12,14 @@ flags = tf.app.flags
 FLAGS = flags.FLAGS
 
 flags.DEFINE_integer('batch_size', 32, 'the batch_size of the training procedure')
-flags.DEFINE_float('lr', 0.0001, 'the learning rate')
+flags.DEFINE_float('lr', 0.0001, 'the learning rate')  # todo: so small?
 flags.DEFINE_float('lr_decay', 0.95, 'the learning rate decay')
 flags.DEFINE_integer('emdedding_dim', 300, 'embedding dim')
 flags.DEFINE_integer('hidden_neural_size', 50, 'LSTM hidden neural size')
-flags.DEFINE_integer('max_len', 73, 'max_len of training sentence')
-flags.DEFINE_integer('valid_num', 100, 'epoch num of validation')
+flags.DEFINE_integer('max_len', 73, 'max_len of training sentence')  # todo: so long?
+flags.DEFINE_integer('valid_num', 100, 'epoch num of validation')  # todo: ??
 flags.DEFINE_integer('checkpoint_num', 1000, 'epoch num of checkpoint')
-flags.DEFINE_float('init_scale', 0.1, 'init scale')
+flags.DEFINE_float('init_scale', 0.1, 'init scale')  # todo: ??
 
 flags.DEFINE_float('keep_prob', 0.5, 'dropout rate')
 flags.DEFINE_integer('num_epoch', 360, 'num epoch')
@@ -39,7 +39,7 @@ class Config(object):
     num_step = FLAGS.max_len
     max_grad_norm = FLAGS.max_grad_norm
     num_epoch = FLAGS.num_epoch
-    max_decay_epoch = FLAGS.max_decay_epoch
+    max_decay_epoch = FLAGS.max_decay_epoch  # todo ?
     valid_num = FLAGS.valid_num
     out_dir = FLAGS.out_dir
     checkpoint_every = FLAGS.check_point_every
@@ -138,9 +138,9 @@ def train_step():
     # gpu_config.gpu_options.allow_growth=True
     with tf.Graph().as_default(), tf.Session() as session:
         # 这个初始化不好，效果极差
-        initializer = tf.random_normal_initializer(0.0, 0.2, dtype=tf.float32)
+        initializer = tf.random_normal_initializer(0.0, 0.2, dtype=tf.float32)  # mean, stddev
         with tf.variable_scope("model", reuse=None, initializer=initializer):
-            model = LSTMRNN(config=config, sess=session, is_training=True)
+            model = LSTMRNN(config=config, sess=session, is_training=True)  # todo: 一定要传 session 吗？
 
         with tf.variable_scope("model", reuse=True, initializer=initializer):
             valid_model = LSTMRNN(config=eval_config, sess=session, is_training=False)
